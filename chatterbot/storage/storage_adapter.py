@@ -32,6 +32,21 @@ class StorageAdapter(object):
             statement.storage = self
             return statement
 
+    def Conversation(self):
+        """
+        Returns a new storage-aware conversation class.
+        """
+        import os
+
+        if 'DJANGO_SETTINGS_MODULE' in os.environ:
+            from chatterbot.ext.django_chatterbot.models import Conversation
+            return Conversation
+        else:
+            from chatterbot.conversation.session import Session as Conversation
+            conversation = Conversation
+            conversation.storage = self
+            return conversation
+
     def generate_base_query(self, chatterbot, session_id):
         """
         Create a base query for the storage adapter.
